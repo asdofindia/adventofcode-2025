@@ -2,9 +2,12 @@
 
 namespace AOC;
 
+use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
 require __DIR__ . "/vendor/autoload.php";
+
+$logger = new Logger("aoc_logger");
 
 if (\count($argv) < 2) {
     die("Pass the challenge number\n");
@@ -22,13 +25,15 @@ if (\count($argv) > 2) {
 $inputFile = "inputs/input$challenge";
 if ($test) {
     $inputFile = "$inputFile-test";
+    $logger->pushHandler(new StreamHandler("php://stdout", Logger::DEBUG));
+} else {
+    $logger->pushHandler(new StreamHandler("php://stdout", Logger::INFO));
 }
 
 $input = file($inputFile, FILE_IGNORE_NEW_LINES);
 
 $className = "\\AOC\\Challenge$challenge\\Run";
 
-$logger = new Logger('aoc_logger');
 $solution = new $className($logger);
 
 $solution->run($input, $test);

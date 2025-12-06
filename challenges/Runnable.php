@@ -3,7 +3,7 @@
 namespace AOC;
 
 abstract class Runnable {
-    private $logger;
+    protected $logger;
 
     /**
      * @param $log

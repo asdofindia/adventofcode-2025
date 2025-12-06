@@ -13,11 +13,11 @@ class Run extends Runnable
 
         foreach ($input as $line) {
             $pointed = $dial->act($line);
-            echo "The dial is rotated $line to point at $pointed\n";
+            $this->logger->debug("The dial is rotated $line to point at $pointed\n");
             if ($pointed === 0) {
                 $totalZeroes += 1;
             }
         }
-        echo "The password is $totalZeroes\n";
+        $this->logger->info("The password is $totalZeroes\n");
     }
 }
