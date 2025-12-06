@@ -16,8 +16,9 @@ class Run extends Runnable
             $start = (int) $start;
             $end = (int) $end;
             for ($i = $start; $i <= $end; $i += 1) {
-                if (Validator::isValid($i)) {
+                if (Validator::isInvalid($i)) {
                     $sum += $i;
+                    $this->logger->debug("invalid: $i");
                 }
             }
         }
