@@ -11,31 +11,46 @@ class Dial
         $this->pointed = $start;
         $this->total = $maxClick + 1;
     }
-    public function act(string $action): int
+    /**
+     * @param $action Action in the AOC format
+     * @param $notifyZero callback to get zero count
+     */
+    public function act(string $action, ?callable $notifyZero = null): int
     {
         $steps = (int) \substr($action, 1);
         if ($action[0] === "L") {
-            return $this->decrement($steps);
+            $zeroesCrossed = $this->decrement($steps);
+            if ($notifyZero) {
+                $notifyZero($zeroesCrossed);
+            }
         } elseif ($action[0] === "R") {
-            return $this->increment($steps);
+            $zeroesCrossed = $this->increment($steps);
+            if ($notifyZero) {
+                $notifyZero($zeroesCrossed);
+            }
         } else {
             throw new \Exception("Unknown action $action");
         }
+        return $this->pointed;
     }
     private function decrement(int $steps): int
     {
+        $crossed = 0;
         $this->pointed -= $steps;
         while ($this->pointed < 0) {
+            $crossed += 1;
             $this->pointed += $this->total;
         }
-        return $this->pointed;
+        return $crossed;
     }
     private function increment(int $steps): int
     {
+        $crossed = 0;
         $this->pointed = $steps + $this->pointed;
         while ($this->pointed >= $this->total) {
+            $crossed += 1;
             $this->pointed -= $this->total;
         }
-        return $this->pointed;
+        return $crossed;
     }
 }
