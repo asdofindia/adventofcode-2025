@@ -6,7 +6,7 @@ use AOC\Runnable;
 
 class Run extends Runnable
 {
-    public function run(array $input, bool $test = false): void
+    public function run(array $input): void
     {
         $dial = new Dial();
         foreach ($input as $line) {

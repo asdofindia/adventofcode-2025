@@ -16,5 +16,5 @@ abstract class Runnable {
      * @param array $input input string as array from AOC
      * @return void
      */
-    abstract public function run(array $input, bool $test = false);
+    abstract public function run(array $input);
 }
