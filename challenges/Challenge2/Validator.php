@@ -42,6 +42,7 @@ class Validator
                 if ($isInvalid) {
                     return true;
                 }
+                $currLength -= 1;
             }
             return false;
         }
