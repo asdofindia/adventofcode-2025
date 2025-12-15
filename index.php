@@ -22,9 +22,23 @@ if (\count($argv) > 2) {
     }
 }
 
-$inputFile = "inputs/input$challenge";
+function get_input_file($challenge, $test) {
+    $expected = "inputs/input$challenge";
+    if ($test) {
+        $expected = "$expected-test";
+    }
+    if (file_exists($expected)) {
+        return $expected;
+    }
+    return null;
+}
+
+$inputFile = get_input_file($challenge, $test);
+if ($inputFile === null) {
+    $p1 = \explode("p", $challenge)[0];
+    $inputFile = get_input_file($p1, $test);
+}
 if ($test) {
-    $inputFile = "$inputFile-test";
     $logger->pushHandler(new StreamHandler("php://stdout", Logger::DEBUG));
 } else {
     $logger->pushHandler(new StreamHandler("php://stdout", Logger::INFO));
