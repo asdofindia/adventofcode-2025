@@ -4,7 +4,7 @@ namespace AOC\Challenge4;
 
 class PaperRollGrid
 {
-    private $grid;
+    public $grid;
     private $width;
     private $height;
     /**
@@ -16,7 +16,19 @@ class PaperRollGrid
         $this->height = \count($grid);
         $this->grid = $grid;
     }
-    public function getEasyCount(): int
+    public function getRollsCount(): int
+    {
+        $count = 0;
+        foreach ($this->grid as $row) {
+            foreach (\str_split($row) as $char) {
+                if ($char === "@") {
+                    $count += 1;
+                }
+            }
+        }
+        return $count;
+    }
+    public function getEasyCount(bool $remove = false): int
     {
         $count = 0;
         for ($i = 0; $i < $this->height; $i++) {
@@ -38,6 +50,9 @@ class PaperRollGrid
 
                 if ($adjacent < 4) {
                     $count += 1;
+                    if ($remove) {
+                        $this->grid[$i][$j] = ".";
+                    }
                 }
             }
         }
