@@ -17,35 +17,7 @@ class Run extends Runnable
             }
         }
 
-        $sum = 0;
-        for ($i = 0; $i < \count($operations); $i++) {
-            $op = $operations[$i];
-            $initial = $this->getIdentity($op);
-            $accumulator = $this->getAccumulator($op);
-            $inputs = $operationInputs[$i];
-            $result = \array_reduce($inputs, $accumulator, $initial);
-            $sum += $result;
-        }
+        $sum = Calculator::getSum($operations, $operationInputs);
         $this->logger->info("The answer is $sum\n");
-    }
-    private function getIdentity(string $op): int
-    {
-        if ($op === "+") {
-            return 0;
-        }
-        if ($op === "*") {
-            return 1;
-        }
-        throw new \Exception("Unexpected operator $op");
-    }
-    private function getAccumulator(string $op)
-    {
-        if ($op === "+") {
-            return fn($carry, $item) => $carry + (int) $item;
-        }
-        if ($op === "*") {
-            return fn($carry, $item) => $carry * (int) $item;
-        }
-        throw new \Exception("Unexpected operator $op");
     }
 }
