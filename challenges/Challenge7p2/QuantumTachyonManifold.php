@@ -7,6 +7,7 @@ class QuantumTachyonManifold
     public int $timelines = 1;
     private int $width;
     private int $height;
+    private $memory = [];
     /**
      * @@param $layers the configuration from top layer of the manifold
      */
@@ -29,8 +30,11 @@ class QuantumTachyonManifold
     ): int {
         $moreTimelines = 0;
         if ($startLayer >= $this->height) {
-            $this->printRoute($route);
+            // $this->printRoute($route);
             return $moreTimelines;
+        }
+        if (array_key_exists("$startLayer#$tachyonChannel", $this->memory)) {
+            return $this->memory["$startLayer#$tachyonChannel"];
         }
         $layer = $this->layers[$startLayer];
         if ($layer[$tachyonChannel] === "^") {
@@ -52,6 +56,7 @@ class QuantumTachyonManifold
                 [...$route, $tachyonChannel],
             );
         }
+        $this->memory["$startLayer#$tachyonChannel"] = $moreTimelines;
         return $moreTimelines;
     }
     private function printRoute($route)
