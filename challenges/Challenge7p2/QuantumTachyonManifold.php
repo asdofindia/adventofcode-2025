@@ -18,22 +18,50 @@ class QuantumTachyonManifold
     public function on(): void
     {
         $channelTachyonIsOn = \strpos($this->layers[0], "S");
-        $this->timelines += $this->startTimeline(1, $channelTachyonIsOn);
+        $this->timelines += $this->startTimeline(1, $channelTachyonIsOn, [
+            $channelTachyonIsOn,
+        ]);
     }
-    private function startTimeline(int $startLayer, int $tachyonChannel): int
-    {
+    private function startTimeline(
+        int $startLayer,
+        int $tachyonChannel,
+        array $route,
+    ): int {
         $moreTimelines = 0;
         if ($startLayer >= $this->height) {
+            $this->printRoute($route);
             return $moreTimelines;
         }
         $layer = $this->layers[$startLayer];
         if ($layer[$tachyonChannel] === "^") {
             $moreTimelines += 1;
-            $moreTimelines += $this->startTimeline($startLayer + 1, $tachyonChannel - 1);
-            $moreTimelines += $this->startTimeline($startLayer + 1, $tachyonChannel + 1);
+            $moreTimelines += $this->startTimeline(
+                $startLayer + 1,
+                $tachyonChannel - 1,
+                [...$route, $tachyonChannel - 1],
+            );
+            $moreTimelines += $this->startTimeline(
+                $startLayer + 1,
+                $tachyonChannel + 1,
+                [...$route, $tachyonChannel + 1],
+            );
         } else {
-            $moreTimelines += $this->startTimeline($startLayer + 1, $tachyonChannel);
+            $moreTimelines += $this->startTimeline(
+                $startLayer + 1,
+                $tachyonChannel,
+                [...$route, $tachyonChannel],
+            );
         }
         return $moreTimelines;
+    }
+    private function printRoute($route)
+    {
+        echo chr(27) . "[H" . chr(27) . "[J";
+        foreach ($route as $point) {
+            echo str_repeat(".", $point);
+            echo "|";
+            echo str_repeat(".", $this->width - 1 - $point);
+            echo "\n";
+        }
     }
 }
