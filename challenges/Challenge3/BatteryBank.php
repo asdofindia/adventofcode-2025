@@ -11,9 +11,8 @@ class BatteryBank
     {
         $this->bank = $bank;
     }
-    public function getLargestJoltage(): int
+    public function getLargestJoltage(int $batterySize = 2): int
     {
-        $batterySize = 2;
         // get an array starting at index 0 with length $batterySize and all values null
         $candidates = \array_fill(0, $batterySize, null); // = [null, null] for $batterySize = 2
         $batteryMustStartAtLeastAtIndex = \strlen($this->bank) - $batterySize;
